@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="log-path">logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"/>
+        </Console>
+        <File name="UniqueParameters" fileName="${log-path}/UniqueParameters.log">
+            <PatternLayout>
+                <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="ValueParameters" fileName="${log-path}/ValueParameters.log">
+            <PatternLayout>
+                <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="Departments" fileName="${log-path}/Departments.log">
+            <PatternLayout>
+                <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="ru.simplegroup.wells.service.ParametersWellsServiceImpl" level="info" additivity="false">
+            <AppenderRef ref="UniqueParameters"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="ru.simplegroup.wells.service.ValueParametersWellsServiceImpl" level="info" additivity="false">
+            <AppenderRef ref="ValueParameters"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="ru.simplegroup.wells.service.DepartmentsToWellsServiceImpl" level="info" additivity="false">
+            <AppenderRef ref="Departments"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
