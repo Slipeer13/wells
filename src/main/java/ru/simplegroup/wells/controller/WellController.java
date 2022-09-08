@@ -29,19 +29,19 @@ public class WellController {
     }
 
     @GetMapping("/parameters")
-    public void getParametersWells() {
-        parametersWellsService.getParametersWells();
+    public String getParametersWells() {
+        return parametersWellsService.getParametersWells();
     }
 
     @GetMapping("/values")
-    public void getValueParametersWells(@RequestParam(name = "idFrom", defaultValue = "10") @Min(1) int idFrom,
+    public String getValueParametersWells(@RequestParam(name = "idFrom", defaultValue = "10") @Min(1) int idFrom,
                                         @RequestParam(name = "idTo", defaultValue = "30") @Min(1) int idTo) {
-        valueParametersWellsService.getValueParametersWells(idFrom, idTo);
+        return valueParametersWellsService.getValueParametersWells(idFrom, idTo);
     }
 
     @GetMapping("/departments")
-    public void getDepartmentsToWells() {
-        departmentsToWellsService.getDepartmentsToWells();
+    public String getDepartmentsToWells() {
+        return departmentsToWellsService.getDepartmentsToWells();
 
     }
 
