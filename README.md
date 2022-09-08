@@ -15,3 +15,27 @@ Rest web service Wells позволяет получить данные из ф�
 будет работать сервер.
 - Для обновления конфигурации приложения- клиента Wells необходимо выполнить POST(body = none) запрос на ендпоинт "actuator/refresh", 
 после этого настройки приложения обновятся 
+### Скрипты для PostgresSql
+CREATE TABLE public.parameter
+(
+    well_id integer NOT NULL,
+    parameter_name varchar(255) NOT NULL,
+    value double precision NOT NULL,
+	PRIMARY KEY(well_id, parameter_name, value)
+);
+CREATE TABLE public.well
+(
+    id integer NOT NULL,
+    name varchar(255) NOT NULL,
+    x double precision,
+    y double precision,
+	PRIMARY KEY(id)
+);
+CREATE TABLE public.department
+(
+    name varchar(255) NOT NULL,
+    x double precision NOT NULL,
+    y double precision NOT NULL,
+    radius double precision NOT NULL,
+	PRIMARY KEY(name)
+);
