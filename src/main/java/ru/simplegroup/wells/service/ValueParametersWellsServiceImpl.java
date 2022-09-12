@@ -32,12 +32,12 @@ public class ValueParametersWellsServiceImpl implements ValueParametersWellsServ
         List<Well> wells = dataService.getWells();
         wells = wells.stream().filter(well -> well.getId() >= idWellFrom && well.getId() <= idWellTo).collect(Collectors.toList());
         Map<Long, List<Parameter>> parametersMap = parameters.stream().collect(Collectors.groupingBy(Parameter::getWellId));
-        String result = wells.stream().map(e -> "\n" + e.getName() + //Наименование скважины
-                        parametersMap.get(e.getId()).stream().collect(Collectors.groupingBy(Parameter::getParameterName)).entrySet().stream()//параметры скважины
-                                .map(e1 -> "\n" + e1.getKey() //наименование параметра
-                                        + "\n мин. значение : " + e1.getValue().stream().min((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //минимальное значение
-                                        + "\n макс. значение : " + e1.getValue().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //максимальное значение
-                                        + "\n среднее значение : " + df.format(e1.getValue().stream().mapToDouble(Parameter::getValue).sum() / e1.getValue().stream().map(Parameter::getValue).count())) //среднее значение
+        String result = wells.stream().map(well -> "\n" + well.getName() + //Наименование скважины
+                        parametersMap.get(well.getId()).stream().collect(Collectors.groupingBy(Parameter::getParameterName)).entrySet().stream()//параметры скважины
+                                .map(parameter -> "\n" + parameter.getKey() //наименование параметра
+                                        + "\n мин. значение : " + parameter.getValue().stream().min((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //минимальное значение
+                                        + "\n макс. значение : " + parameter.getValue().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //максимальное значение
+                                        + "\n среднее значение : " + df.format(parameter.getValue().stream().mapToDouble(Parameter::getValue).sum() / parameter.getValue().stream().map(Parameter::getValue).count())) //среднее значение
                                 .collect(Collectors.joining()) + "\n")
                 .collect(Collectors.joining());
         Instant finish = Instant.now();
