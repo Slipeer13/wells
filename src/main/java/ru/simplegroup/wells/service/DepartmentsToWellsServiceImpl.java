@@ -29,7 +29,7 @@ public class DepartmentsToWellsServiceImpl implements DepartmentsToWellsService{
         List<Well> wells = dataService.getWells();
         String result = wells.stream()
                 .map(well -> departments.stream().filter(department -> isWellLocatedInDepartment(well, department))
-                        .map(department -> String.format("\n%s принадлежит месторождению %s", well.getName(), department.getName()))
+                        .map(department -> String.format("%n%s принадлежит месторождению %s", well.getName(), department.getName()))
                         .collect(Collectors.joining())).collect(Collectors.joining());
         Instant finish = Instant.now();
         long elapsed = Duration.between(start, finish).toMillis();

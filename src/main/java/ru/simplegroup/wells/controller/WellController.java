@@ -1,6 +1,7 @@
 package ru.simplegroup.wells.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,19 +30,19 @@ public class WellController {
     }
 
     @GetMapping("/parameters")
-    public String getParametersWells() {
-        return parametersWellsService.getParametersWells();
+    public ResponseEntity<String> getParametersWells() {
+        return ResponseEntity.ok(parametersWellsService.getParametersWells());
     }
 
     @GetMapping("/values")
-    public String getValueParametersWells(@RequestParam(name = "idFrom", defaultValue = "10") @Min(1) int idFrom,
+    public ResponseEntity<String> getValueParametersWells(@RequestParam(name = "idFrom", defaultValue = "10") @Min(1) int idFrom,
                                         @RequestParam(name = "idTo", defaultValue = "30") @Min(1) int idTo) {
-        return valueParametersWellsService.getValueParametersWells(idFrom, idTo);
+        return ResponseEntity.ok(valueParametersWellsService.getValueParametersWells(idFrom, idTo));
     }
 
     @GetMapping("/departments")
-    public String getDepartmentsToWells() {
-        return departmentsToWellsService.getDepartmentsToWells();
+    public ResponseEntity<String> getDepartmentsToWells() {
+        return ResponseEntity.ok(departmentsToWellsService.getDepartmentsToWells());
 
     }
 
