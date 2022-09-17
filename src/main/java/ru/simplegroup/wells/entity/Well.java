@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
@@ -23,15 +24,19 @@ public class Well {
 
     @Id
     @Min(1)
+    @NotNull
     private Long id;
 
     @Size(min = 2, message = "parameterName must be min 2 symbol")
+    @NotNull
     private String name;
 
     @Min(value = 0, message = "value must be over 0")
+    @NotNull
     private Double x;
 
     @Min(value = 0, message = "value must be over 0")
+    @NotNull
     private Double y;
 
     @Override

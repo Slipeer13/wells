@@ -46,7 +46,7 @@ public class DataServiceImpl implements DataService {
         } else {
             throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
         }
-        return departments.stream().filter(department -> department.getX() != null
+        return departments.stream().filter(department -> department.getName() != null && department.getX() != null
                 && department.getY() != null && department.getRadius() != null).collect(Collectors.toList());
     }
 
@@ -60,7 +60,7 @@ public class DataServiceImpl implements DataService {
         } else {
             throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
         }
-        return wells.stream().filter(well -> well.getX() != null
+        return wells.stream().filter(well -> well.getId() != null && well.getName() != null && well.getX() != null
                 && well.getY() != null).collect(Collectors.toList());
     }
 
@@ -74,7 +74,8 @@ public class DataServiceImpl implements DataService {
         } else {
             throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
         }
-        return parameters.stream().filter(parameter -> parameter.getValue() != null).collect(Collectors.toList());
+        return parameters.stream().filter(parameter -> parameter.getWellId() != null && parameter.getParameterName() != null &&
+                parameter.getValue() != null).collect(Collectors.toList());
     }
 
 }

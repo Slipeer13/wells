@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
@@ -21,16 +22,19 @@ public class Parameter implements Serializable {
     @Id
     @Min(1)
     @Column(name = "well_id")
+    @NotNull
     private Long wellId;
 
     @Id
     @Size(min = 2, message = "parameterName must be min 2 symbol")
+    @NotNull
     @Column(name = "parameter_name")
     private String parameterName;
 
     @Id
     @Min(value = 0, message = "value must be over 0")
     @Column(name = "value")
+    @NotNull
     private Double value;
 
     @Override
