@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public interface ReadFileRepository<T> {
-
-    List<T> findAll();
+public interface ReadFileRepository<T> extends DataRepository<T>{
 
     default List<T> readValue(String fileName, Class<T[]> clazz) {
         List<T> result = new ArrayList<>();

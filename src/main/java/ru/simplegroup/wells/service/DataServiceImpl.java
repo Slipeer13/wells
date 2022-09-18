@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.simplegroup.wells.entity.Department;
 import ru.simplegroup.wells.entity.Parameter;
 import ru.simplegroup.wells.entity.Well;
-import ru.simplegroup.wells.repository.DepartmentRepository;
-import ru.simplegroup.wells.repository.ParameterRepository;
-import ru.simplegroup.wells.repository.ReadFileRepository;
-import ru.simplegroup.wells.repository.WellRepository;
+import ru.simplegroup.wells.repository.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -38,44 +35,40 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public List<Department> getDepartments() {
-        List<Department> departments;
-        if ("file".equalsIgnoreCase(pathData)) {
-            departments = departmentReadFileRepository.findAll();
-        } else if ("dataBase".equalsIgnoreCase(pathData)) {
-            departments = departmentRepository.findAll();
-        } else {
-            throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
-        }
+        List<Department> departments = getDataRepository(new Department(), pathData).findAll();
         return departments.stream().filter(department -> department.getName() != null && department.getX() != null
                 && department.getY() != null && department.getRadius() != null).collect(Collectors.toList());
     }
 
     @Override
     public List<Well> getWells() {
-        List<Well> wells;
-        if ("file".equalsIgnoreCase(pathData)) {
-            wells = wellReadFileRepository.findAll();
-        } else if ("dataBase".equalsIgnoreCase(pathData)) {
-            wells = wellRepository.findAll();
-        } else {
-            throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
-        }
+        List<Well> wells = getDataRepository(new Well(), pathData).findAll();;
         return wells.stream().filter(well -> well.getId() != null && well.getName() != null && well.getX() != null
                 && well.getY() != null).collect(Collectors.toList());
     }
 
     @Override
     public List<Parameter> getParameters() {
-        List<Parameter> parameters;
+        List<Parameter> parameters = getDataRepository(new Parameter(), pathData).findAll();;
+        return parameters.stream().filter(parameter -> parameter.getWellId() != null && parameter.getParameterName() != null &&
+                parameter.getValue() != null).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> DataRepository<T> getDataRepository(T t, String pathData) {
+        DataRepository<T> result = null;
         if ("file".equalsIgnoreCase(pathData)) {
-            parameters = parameterReadFileRepository.findAll();
+            if (t instanceof Well) result = (DataRepository<T>) wellReadFileRepository;
+            else if (t instanceof Department) result = (DataRepository<T>) departmentReadFileRepository;
+            else if (t instanceof Parameter) result = (DataRepository<T>) parameterReadFileRepository;
         } else if ("dataBase".equalsIgnoreCase(pathData)) {
-            parameters = parameterRepository.findAll();
+            if (t instanceof Well) result = (DataRepository<T>) wellRepository;
+            else if (t instanceof Department) result = (DataRepository<T>) departmentRepository;
+            else if (t instanceof Parameter) result = (DataRepository<T>) parameterRepository;
         } else {
             throw new NoSuchElementException("the data path must be \"file\" or \"dataBase\"");
         }
-        return parameters.stream().filter(parameter -> parameter.getWellId() != null && parameter.getParameterName() != null &&
-                parameter.getValue() != null).collect(Collectors.toList());
+        return result;
     }
 
 }
