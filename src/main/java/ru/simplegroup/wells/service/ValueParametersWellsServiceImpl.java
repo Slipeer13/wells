@@ -9,8 +9,10 @@ import ru.simplegroup.wells.entity.Well;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +33,19 @@ public class ValueParametersWellsServiceImpl implements ValueParametersWellsServ
         List<Parameter> parameters = dataService.getParameters();
         List<Well> wells = dataService.getWells();
         wells = wells.stream().filter(well -> well.getId() >= idWellFrom && well.getId() <= idWellTo).collect(Collectors.toList());
+        AtomicReference<DoubleSummaryStatistics> doubleSummaryStatistics = new AtomicReference<>(new DoubleSummaryStatistics());
         Map<Long, List<Parameter>> parametersMap = parameters.stream().collect(Collectors.groupingBy(Parameter::getWellId));
         String result = wells.stream().map(well -> "\n" + well.getName() + //Наименование скважины
                         parametersMap.get(well.getId()).stream().collect(Collectors.groupingBy(Parameter::getParameterName)).entrySet().stream()//параметры скважины
+                                .peek(p-> {
+                                            doubleSummaryStatistics.set(new DoubleSummaryStatistics());
+                                            p.getValue().forEach(p1-> doubleSummaryStatistics.get().accept(p1.getValue()));
+                                        }
+                                )
                                 .map(parameter -> "\n" + parameter.getKey() //наименование параметра
-                                        + "\n мин. значение : " + parameter.getValue().stream().min((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //минимальное значение
-                                        + "\n макс. значение : " + parameter.getValue().stream().max((o1, o2) -> (int) (o1.getValue() - o2.getValue())).get().getValue() //максимальное значение
-                                        + "\n среднее значение : " + df.format(parameter.getValue().stream().mapToDouble(Parameter::getValue).sum() / parameter.getValue().stream().map(Parameter::getValue).count())) //среднее значение
+                                        + "\n мин. значение : " + doubleSummaryStatistics.get().getMin()
+                                        + "\n макс. значение : " + doubleSummaryStatistics.get().getMax()
+                                        + "\n среднее значение : " + df.format(doubleSummaryStatistics.get().getAverage()))
                                 .collect(Collectors.joining()) + "\n")
                 .collect(Collectors.joining());
         Instant finish = Instant.now();
